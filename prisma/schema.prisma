@@ -19,7 +19,7 @@ model User {
   name  String
   password String
   posts Post[]
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
@@ -31,6 +31,6 @@ model Post {
   published   Boolean @default(true)
   author      User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
