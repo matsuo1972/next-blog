@@ -1,6 +1,5 @@
 import { getPosts, searchPosts } from '@/lib/post';
 import PostCard from '@/components/post/PostCard';
-import { Post } from '@/types/post';
 
 type SearchParams = {
     search?: string;
