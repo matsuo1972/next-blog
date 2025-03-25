@@ -10,7 +10,7 @@ type ActionState = {
     success: boolean,
     errors: Record<string, string[]>
 }
-/* eslint-disable rule-name */
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 // バリデーションエラー処理
 function handleValidationError(error: ZodError): ActionState {
     console.log('error', error);
