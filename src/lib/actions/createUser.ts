@@ -4,22 +4,25 @@ import { prisma } from "@/lib/prisma";
 import bcryptjs from "bcryptjs";
 import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
+import { ZodError } from "zod";
 
 type ActionState = {
     success: boolean,
     errors: Record<string, string[]>
 }
-
+/* eslint-disable rule-name */
 // バリデーションエラー処理
-function handleValidationError(error: any): ActionState {
+function handleValidationError(error: ZodError): ActionState {
     console.log('error', error);
     const { fieldErrors, formErrors } = error.flatten();
+    // undefiendを除去
+    const castFieldErrors = fieldErrors as Record<string, string[]>;
     // zodの仕様でパスワード一致確認のエラーは formErrorsで渡ってくる
     // formErrorsがある場合は、confirmPasswordフィールドにエラーを追加
     if (formErrors.length > 0) {
         return { success: false, errors: { ...fieldErrors, confirmPassword: formErrors}}
     }
-    return { success: false, errors: fieldErrors };
+    return { success: false, errors: castFieldErrors };
 }
 // カスタムエラー処理
 function handleError(customErrors: Record<string, string[]>): ActionState {
@@ -47,7 +50,7 @@ export async function createUser(prevState: ActionState, formData: FormData): Pr
 
     // 存在していなければDBにユーザーを作成します
     const hashedPassword = await bcryptjs.hash(rawFormData.password, 12);
-  
+
     await prisma.user.create({
         data: {
             name: rawFormData.name,
